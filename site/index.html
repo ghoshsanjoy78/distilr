@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="distilr — terminal agent that distills any SaaS into a complete build spec, ready for your AI coding agent." />
+  <meta name="theme-color" content="#faeee7" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="distilr" />
+  <meta property="og:description" content="Terminal agent that distills any SaaS into a complete build spec — research, design tokens, architecture, and a phased plan, ready for your AI coding agent." />
+  <meta property="og:url" content="https://distilr.dev" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="distilr" />
+  <meta name="twitter:description" content="Terminal agent that distills any SaaS into a complete build spec." />
+
+  <title>distilr — distill any SaaS into a build spec</title>
+  <style>
+    /* ─── Happy Hues palette #15 ──────────────────────────────────── */
+    :root {
+      --bg:          #faeee7;  /* page background — warm peach */
+      --surface:     #fffffe;  /* card / surface — near-white */
+      --headline:    #33272a;  /* deep brown — headings, borders */
+      --body:        #594a4e;  /* muted brown — paragraph text */
+      --accent:      #ff8ba7;  /* vibrant pink — primary CTA */
+      --accent-soft: #ffc6c7;  /* soft pink — chip background */
+      --accent-mint: #c3f0ca;  /* mint — callouts / hints */
+      --term-bg:     #33272a;  /* terminal-style code block bg */
+      --term-fg:     #faeee7;  /* terminal-style code block fg */
+
+      --mono: "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas,
+              "Liberation Mono", "Courier New", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--body);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--headline);
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    a:hover {
+      background: var(--accent-soft);
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
+
+    /* ─── Hero ─────────────────────────────────────────────────────── */
+
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      margin: 0 0 1.25rem;
+      color: var(--headline);
+      letter-spacing: -0.04em;
+    }
+
+    .hero h1::after {
+      content: "_";
+      color: var(--accent);
+      animation: blink 1.05s steps(2, start) infinite;
+      margin-left: 0.05em;
+    }
+
+    @keyframes blink {
+      to { visibility: hidden; }
+    }
+
+    .hero .tagline {
+      font-size: 1rem;
+      color: var(--body);
+      margin: 0 auto 2rem;
+      max-width: 580px;
+      line-height: 1.6;
+    }
+
+    .hero .ctas {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.25rem;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.01em;
+      transition: transform 0.1s ease;
+      border: 2px solid var(--headline);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--headline);
+    }
+    .btn-primary:hover {
+      background: var(--accent-soft);
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--headline);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--headline);
+    }
+    .btn-secondary:hover {
+      background: var(--accent-mint);
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--headline);
+    }
+
+    .btn svg { width: 16px; height: 16px; }
+
+    /* ─── Section headings ─────────────────────────────────────────── */
+
+    section { margin-bottom: 3.5rem; }
+
+    h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 1.25rem;
+      color: var(--headline);
+      letter-spacing: 0.02em;
+      text-transform: lowercase;
+    }
+    h2::before {
+      content: "> ";
+      color: var(--accent);
+    }
+
+    p { margin: 0 0 1rem; }
+
+    /* ─── Feature grid ─────────────────────────────────────────────── */
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .feature {
+      background: var(--surface);
+      border: 2px solid var(--headline);
+      border-radius: 6px;
+      padding: 1.1rem 1.25rem;
+    }
+
+    .feature h3 {
+      margin: 0 0 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--headline);
+      letter-spacing: 0.01em;
+    }
+    .feature h3::before {
+      content: "# ";
+      color: var(--accent);
+    }
+    .feature p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--body);
+      line-height: 1.55;
+    }
+
+    /* ─── Terminal-style code block (window chrome + prompt) ───────── */
+
+    .terminal {
+      background: var(--term-bg);
+      border: 2px solid var(--headline);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .terminal-titlebar {
+      background: #2a1f22;
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-bottom: 1px solid #1f1518;
+    }
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-r { background: #ff5f56; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #27c93f; }
+    .terminal-title {
+      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      color: #9b8b8e;
+      letter-spacing: 0.02em;
+    }
+
+    .terminal-body {
+      padding: 1rem 1.25rem;
+      color: var(--term-fg);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .terminal-body .prompt { color: var(--accent); user-select: none; }
+    .terminal-body .comment { color: #9b8b8e; }
+    .terminal-body .step-num { color: var(--accent); }
+    .terminal-body .step-name { color: var(--accent-mint); font-weight: 700; }
+
+    /* ─── Per-line copy buttons (quickstart) ─────────────────────── */
+
+    .cmd-line {
+      position: relative;
+      padding-left: 0;
+    }
+    .copy-btn {
+      position: absolute;
+      left: -1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--term-fg);
+      cursor: pointer;
+      padding: 4px;
+      margin: 0;
+      opacity: 0;
+      transition: opacity 0.1s ease, color 0.1s ease;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+    }
+    .copy-btn svg {
+      width: 13px;
+      height: 13px;
+      display: block;
+    }
+    .cmd-line:hover .copy-btn { opacity: 0.55; }
+    .copy-btn:hover { opacity: 1 !important; color: var(--accent-mint); }
+    .copy-btn:focus { outline: none; opacity: 1; color: var(--accent-mint); }
+    .copy-btn.copied {
+      opacity: 1 !important;
+      color: var(--accent-mint);
+    }
+
+    /* Inline code in prose */
+    p code, li code {
+      font-family: var(--mono);
+      background: var(--accent-soft);
+      color: var(--headline);
+      padding: 0.05em 0.4em;
+      border-radius: 3px;
+      font-size: 0.88em;
+    }
+
+    /* ─── Implementer chips ───────────────────────────────────────── */
+
+    .implementers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .implementers li {
+      background: var(--accent-soft);
+      border: 1.5px solid var(--headline);
+      border-radius: 4px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.8rem;
+      color: var(--headline);
+      font-weight: 600;
+    }
+
+    /* ─── Scope callout ───────────────────────────────────────────── */
+
+    .callout {
+      background: var(--accent-mint);
+      border: 2px solid var(--headline);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+      color: var(--headline);
+      line-height: 1.6;
+    }
+    .callout strong { font-weight: 700; }
+    .callout::before {
+      content: "! ";
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ─── Footer ──────────────────────────────────────────────────── */
+
+    footer {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 2px dashed var(--headline);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--body);
+    }
+    footer .links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    footer .links a {
+      text-decoration-color: var(--headline);
+    }
+
+    /* ─── Responsive ──────────────────────────────────────────────── */
+
+    @media (max-width: 600px) {
+      main { padding: 2.5rem 1rem 3.5rem; }
+      .hero h1 { font-size: 2.75rem; }
+      .terminal-body { font-size: 0.75rem; padding: 0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>distilr</h1>
+      <p class="tagline">
+        Terminal agent that distills any SaaS into a complete build spec —
+        research, design tokens, architecture, and a phased plan,
+        ready for your AI coding agent.
+      </p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="https://github.com/ghoshsanjoy78/distilr">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          View on GitHub
+        </a>
+        <a class="btn btn-secondary" href="#quickstart">
+          Quickstart
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>what it does</h2>
+      <p>
+        Point it at any SaaS — a form builder, a scheduling tool, a project
+        tracker, an email tool, anything with a focused feature surface.
+        distilr explores the public marketing site and the authenticated app
+        in a real Chromium browser, distills what it sees into a feature
+        catalog, walks you through a wizard, and emits a phased build spec
+        your coding agent can execute.
+      </p>
+      <p>
+        You stay in the loop. The agent never enters payment info, sends
+        emails, or clicks destructive buttons without your explicit terminal
+        approval. Press <code>p</code> at any point to interrupt and steer.
+      </p>
+
+      <div class="callout">
+        <strong>scope.</strong> distilr produces an MVP-sized
+        <em>inspired-by</em> spec — typically 5–10 phases, ≤ 8 must-have
+        features. It's not a tool for reproducing sprawling enterprise
+        platforms or creative-app suites feature-for-feature. Narrow your
+        target to a specific module — e.g. just the support-ticket surface
+        of a CRM, or the color-correction surface of an image editor.
+      </div>
+    </section>
+
+    <section>
+      <h2>how distilr respects the source</h2>
+      <p>
+        distilr studies a SaaS to inform a <em>new</em> MVP — never to clone
+        it. Every agent in the pipeline operates under these rules, baked
+        into their system prompts. The source of truth is one file
+        (<code>src/agents/guidelines.ts</code>) so the prompts and these
+        docs cannot drift apart.
+      </p>
+
+      <ol style="padding-left: 1.5rem; margin: 0;">
+        <li style="margin-bottom: 0.6rem;">
+          <strong>Never copy source code</strong> (even partially). We
+          capture behavior and shape; the implementing agent writes new
+          code from scratch.
+        </li>
+        <li style="margin-bottom: 0.6rem;">
+          <strong>Never reproduce exact UI designs, layouts, or
+          assets.</strong> Describe patterns, not pixel-perfect copies.
+          No extracting icons, illustrations, custom fonts, or brand
+          assets.
+        </li>
+        <li style="margin-bottom: 0.6rem;">
+          <strong>Never copy text content</strong> — docs, onboarding
+          flows, microcopy, error messages, marketing copy. Describe what
+          the text accomplishes; new copy is written for the new product.
+        </li>
+        <li style="margin-bottom: 0.6rem;">
+          <strong>Never use the source's trademarks or branding</strong>
+          in a confusing way. The output is <em>inspired-by</em>, not a
+          clone or knockoff. Pick a name that's clearly distinct.
+        </li>
+        <li style="margin-bottom: 0.6rem;">
+          <strong>Respect the source's Terms of Service.</strong> Stay on
+          the user-facing surface. Respect rate limits. Don't
+          reverse-engineer protected APIs. Don't bulk-scrape.
+        </li>
+      </ol>
+
+      <p style="margin-top: 1rem; font-size: 0.9rem;">
+        These are not opt-in — they're injected into every heavy agent's
+        system prompt at build time.
+      </p>
+    </section>
+
+    <section>
+      <h2>built for the agent era</h2>
+      <div class="features">
+        <div class="feature">
+          <h3>multi-provider</h3>
+          <p>One CLI, four providers. Anthropic, OpenAI, Google, OpenRouter — pick whichever you have keys for.</p>
+        </div>
+        <div class="feature">
+          <h3>tool-agnostic output</h3>
+          <p>Emits the harness-engineering doc layout your coding agent already knows. <code>AGENTS.md</code> and <code>CLAUDE.md</code> in one shot.</p>
+        </div>
+        <div class="feature">
+          <h3>scope-aware</h3>
+          <p>Pre-flight LLM realism check, hard caps on must-haves and phases, token-budget warnings at 50k / 200k / 500k.</p>
+        </div>
+        <div class="feature">
+          <h3>you sign in</h3>
+          <p>Real headed Chromium browser. The agent never sees credentials. Destructive clicks always prompt the terminal first.</p>
+        </div>
+        <div class="feature">
+          <h3>checkpointed</h3>
+          <p><code>Ctrl-C</code> is always safe. Resume any project from its last completed stage.</p>
+        </div>
+        <div class="feature">
+          <h3>open source</h3>
+          <p>MIT-licensed TypeScript. PRs welcome — see <a href="https://github.com/ghoshsanjoy78/distilr/blob/main/CONTRIBUTING.md">CONTRIBUTING</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>the pipeline</h2>
+      <div class="terminal">
+        <div class="terminal-titlebar">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="terminal-title">~/distilr — pipeline</span>
+        </div>
+        <div class="terminal-body"><span class="step-num">1.</span>  <span class="step-name">target     </span> pick the SaaS to study (or describe your idea)
+<span class="step-num">2.</span>  <span class="step-name">recon      </span> agent explores the public marketing surface
+<span class="step-num">3.</span>  <span class="step-name">login      </span> headed browser opens — you sign in manually
+<span class="step-num">4.</span>  <span class="step-name">explore    </span> agent drives the authenticated app
+<span class="step-num">5.</span>  <span class="step-name">synthesize </span> observations → structured feature catalog
+<span class="step-num">6.</span>  <span class="step-name">wizard     </span> 10 questions to shape your MVP
+<span class="step-num">7.</span>  <span class="step-name">architect  </span> system design + tokens + phased plan
+<span class="step-num">8.</span>  <span class="step-name">emit       </span> harness-engineering doc tree, ready to ship
+<span class="step-num">9.</span>  <span class="step-name">build      </span> setup checklist + copy-paste prompts for your AI coder</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>works with any coding agent</h2>
+      <p>
+        Output is tool-agnostic — same content under both <code>AGENTS.md</code>
+        and <code>CLAUDE.md</code>, plus per-phase exec plans your agent can pick up.
+      </p>
+      <ul class="implementers">
+        <li>Claude Code</li>
+        <li>OpenAI Codex</li>
+        <li>OpenCode</li>
+        <li>Aider</li>
+        <li>Cursor</li>
+        <li>GitHub Copilot</li>
+        <li>Gemini CLI</li>
+      </ul>
+    </section>
+
+    <section id="quickstart">
+      <h2>quickstart</h2>
+      <div class="terminal">
+        <div class="terminal-titlebar">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="terminal-title">~ — bash</span>
+        </div>
+        <div class="terminal-body" style="padding-left: 2.5rem;"><div class="cmd-line"><button class="copy-btn" type="button" data-cmd="git clone https://github.com/ghoshsanjoy78/distilr.git" aria-label="Copy command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><span class="prompt">$ </span>git clone https://github.com/ghoshsanjoy78/distilr.git</div><div class="cmd-line"><button class="copy-btn" type="button" data-cmd="cd distilr" aria-label="Copy command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><span class="prompt">$ </span>cd distilr</div><div class="cmd-line"><button class="copy-btn" type="button" data-cmd="npm install" aria-label="Copy command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><span class="prompt">$ </span>npm install</div><div class="cmd-line"><span class="comment"># downloads Chromium + compiles TS via postinstall</span></div><div class="cmd-line"><button class="copy-btn" type="button" data-cmd="./distilr" aria-label="Copy command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><span class="prompt">$ </span>./distilr</div></div>
+      </div>
+      <p style="font-size: 0.85rem; margin-top: 1rem;">
+        Requires Node 20+. The first run launches a setup wizard for your
+        provider and API key.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="links">
+      <a href="https://github.com/ghoshsanjoy78/distilr">GitHub</a>
+      <a href="https://github.com/ghoshsanjoy78/distilr/blob/main/README.md">README</a>
+      <a href="https://github.com/ghoshsanjoy78/distilr/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/ghoshsanjoy78/distilr/blob/main/CONTRIBUTING.md">Contributing</a>
+      <a href="https://github.com/ghoshsanjoy78/distilr/blob/main/SECURITY.md">Security</a>
+    </div>
+    <div>MIT licensed. © Sanjoy Ghosh.</div>
+  </footer>
+
+  <script>
+    // Per-line copy buttons. Click → write command to clipboard,
+    // swap icon to a green checkmark for 1.2s, then revert.
+    (function () {
+      const COPY_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+
+      async function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        // Fallback for environments without the Clipboard API.
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+
+      document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', async function () {
+          const cmd = btn.dataset.cmd || '';
+          try {
+            await copyToClipboard(cmd);
+            btn.classList.add('copied');
+            btn.innerHTML = CHECK_SVG;
+            setTimeout(function () {
+              btn.classList.remove('copied');
+              btn.innerHTML = COPY_SVG;
+              btn.blur();
+            }, 1200);
+          } catch (e) {
+            console.error('Copy failed:', e);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

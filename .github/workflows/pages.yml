@@ -1,0 +1,52 @@
+name: Deploy site to GitHub Pages
+
+# Triggers a Pages deploy whenever the website folder (or this workflow
+# itself) changes on main. Also exposed as a manual run via the Actions
+# tab in case you ever need to redeploy without changing files.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+# Permissions required by the official Pages actions.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, but don't cancel in-progress
+# runs — let them finish so we don't end up with a half-deployed site.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          # If Pages isn't enabled on the repo yet, configure it with
+          # GitHub Actions as the source. Avoids a "Not Found" failure
+          # when the repo was just created (or Pages is currently set
+          # to a different source like "Deploy from a branch").
+          enablement: true
+
+      - name: Upload site/ as the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

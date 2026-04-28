@@ -1,0 +1,45 @@
+name: Feature request
+description: Suggest an enhancement or a new capability.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an idea. The clearer the *problem* you're trying to solve, the easier it is to evaluate the solution.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the user-facing pain. What's currently awkward, slow, or missing?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How would you like distilr to behave? Concrete is better than abstract.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about and why you preferred this one.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Rough scope
+      description: Best guess — fine to skip if unsure.
+      options:
+        - Small (a flag, a prompt tweak, a doc fix)
+        - Medium (a new stage / agent / tool)
+        - Large (architectural change)
+        - Not sure
+  - type: checkboxes
+    id: pre-flight
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues to make sure this isn't a duplicate.
+          required: true

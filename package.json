@@ -1,0 +1,76 @@
+{
+  "name": "distilr",
+  "version": "0.1.0",
+  "description": "Terminal agent that distills any SaaS into a complete build spec — research, design tokens, architecture, and a phased plan, ready for your AI coding agent.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Sanjoy Ghosh",
+  "homepage": "https://github.com/ghoshsanjoy78/distilr#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghoshsanjoy78/distilr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ghoshsanjoy78/distilr/issues"
+  },
+  "keywords": [
+    "saas",
+    "spec",
+    "specification",
+    "agent",
+    "ai",
+    "claude",
+    "anthropic",
+    "openai",
+    "gemini",
+    "openrouter",
+    "playwright",
+    "cli",
+    "tui",
+    "ink",
+    "code-generation"
+  ],
+  "bin": {
+    "distilr": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.md",
+    "CHANGELOG.md",
+    ".env.example"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/cli.js",
+    "setup": "playwright install chromium",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "playwright install chromium && tsc"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.0",
+    "@ai-sdk/google": "^3.0.0",
+    "@ai-sdk/openai": "^3.0.0",
+    "@openrouter/ai-sdk-provider": "^2.8.0",
+    "ai": "^6.0.0",
+    "commander": "^13.0.0",
+    "dotenv": "^16.4.0",
+    "ink": "^5.1.0",
+    "ink-select-input": "^6.0.0",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^6.0.0",
+    "pino": "^9.5.0",
+    "playwright": "^1.50.0",
+    "react": "^18.3.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

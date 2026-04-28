@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/ghoshsanjoy78/distilr/blob/main/SECURITY.md
+    about: Please report security issues privately — see SECURITY.md.
+  - name: Question or discussion
+    url: https://github.com/ghoshsanjoy78/distilr/discussions
+    about: For open-ended questions and design discussions, use Discussions.

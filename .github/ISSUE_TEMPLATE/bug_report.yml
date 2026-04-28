@@ -1,0 +1,109 @@
+name: Bug report
+description: Something is broken or not behaving as documented.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug report. Please fill in as much as you can — partial reports are fine, but the more context the easier it is to fix.
+
+        **Don't include API keys, full session logs with credentials, or proprietary content of the SaaS you were studying.** Sanitize before pasting.
+  - type: input
+    id: version
+    attributes:
+      label: distilr version
+      description: Output of `./distilr --help` (top line) or `git rev-parse HEAD` if you're on `main`.
+      placeholder: "0.1.0 (commit abc1234)"
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options:
+        - anthropic
+        - openai
+        - google / gemini
+        - openrouter
+        - not relevant (CLI / TUI bug)
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      placeholder: "claude-sonnet-4-6 / gpt-4o / gemini-2.5-pro / …"
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      description: Output of `node --version`.
+      placeholder: "v20.18.1"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: "macOS 14.6 / Ubuntu 22.04 / …"
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Target SaaS (if applicable)
+      description: URL or product name. Skip for CLI / TUI bugs.
+      placeholder: "https://tally.so"
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Pipeline stage where the bug occurred
+      options:
+        - target (stage 1)
+        - recon (stage 2)
+        - login (stage 3)
+        - explore (stage 4)
+        - synthesize (stage 5)
+        - wizard (stage 6)
+        - architect (stage 7)
+        - emit (stage 8)
+        - setup wizard (distilr config)
+        - other / not stage-specific
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: Include error messages exactly as shown if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ./distilr
+        2. Pick "I have a specific SaaS in mind"
+        3. Type "tally.so"
+        4. Observe …
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: From `distilr.log` or `projects/<slug>/log/...`. Trim aggressively — paste the few lines around the error.
+      render: text
+  - type: checkboxes
+    id: pre-flight
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues to make sure this isn't a duplicate.
+          required: true
+        - label: I'm running on Node 20+ and a UTF-8 terminal.
+          required: true

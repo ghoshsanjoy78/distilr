@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Convenience wrapper so you can run `./distilr` instead of `node dist/cli.js`.
+# Builds on first run if dist/ is missing.
+#
+# After Node exits cleanly, if stage 08 wrote an output-dir path to the
+# auto-cd hand-off file, offer to drop the user into that directory.
+# A child process can't change its parent shell's cwd, so we cd inside
+# this wrapper and exec a new interactive shell — replacing the wrapper
+# process. When the user later `exit`s that shell, they're back in their
+# original shell at the original directory.
+
+set -e
+DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -f "$DIR/dist/cli.js" ]; then
+  echo "Building TypeScript first…"
+  (cd "$DIR" && npm run build)
+fi
+
+CD_TARGET_FILE="${TMPDIR:-/tmp}/distilr-cd-target"
+# Clear any stale hand-off from a prior aborted run before launching.
+rm -f "$CD_TARGET_FILE"
+
+set +e
+node "$DIR/dist/cli.js" "$@"
+EXIT_CODE=$?
+set -e
+
+# Offer auto-cd only when:
+#   - Node exited cleanly (0)
+#   - stage 08 wrote the hand-off file (i.e. project actually finished)
+#   - we have a TTY (interactive terminal — not piped)
+if [ "$EXIT_CODE" = "0" ] && [ -f "$CD_TARGET_FILE" ] && [ -t 0 ] && [ -t 1 ]; then
+  TARGET="$(cat "$CD_TARGET_FILE" 2>/dev/null || true)"
+  rm -f "$CD_TARGET_FILE"
+  if [ -n "$TARGET" ] && [ -d "$TARGET" ]; then
+    printf "\n→ cd into %s ? [Y/n] " "$TARGET"
+    read -r ANSWER || ANSWER=""
+    if [ -z "$ANSWER" ] || [ "${ANSWER:0:1}" = "Y" ] || [ "${ANSWER:0:1}" = "y" ]; then
+      cd "$TARGET"
+      # Replace this wrapper process with an interactive shell rooted in
+      # the target dir. When the user `exit`s, they pop back to their
+      # original shell at the original directory.
+      exec "${SHELL:-/bin/bash}"
+    fi
+  fi
+fi
+
+exit "$EXIT_CODE"

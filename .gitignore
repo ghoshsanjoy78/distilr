@@ -1,0 +1,13 @@
+node_modules/
+dist/
+
+# Per-project artifacts (each run of distilr creates a sub-dir under projects/).
+# The directory is auto-created by ensureProjectsRoot() at runtime — nothing
+# in here needs to be tracked.
+projects/
+
+.env
+.env.local
+*.log
+distilr.log
+.DS_Store
